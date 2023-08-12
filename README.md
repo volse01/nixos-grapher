@@ -5,7 +5,7 @@ a little tool, that generates a block diagram with the build files as entries, p
 if you are writing your configuration in ~/.config/nixos this program generates a clearer overview, of what you have imported and what not. 
 ## example
 
-![nixos-imports](./nix-imports.png)
+![nixos-imports](./nix_imports.png)
 
 ## known issues 
 
