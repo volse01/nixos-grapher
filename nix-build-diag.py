@@ -58,20 +58,16 @@ def inactives_recursive(imports_data, inactives_data):
     for entry in imports_data:
         parent_value = entry[0]
         child_values = entry[1:]
-
-    for entry in inactives_data:
-       set_inactives_data = set(inactives_data)
-       for entry in imports_data:
-            parent_value = entry[0]
-            child_values = entry[1:]
-
-            if parent_value in inactives_data:
-                set_inactives_data.update(child_values)
-                updated_inactives_data.extend(child_values)
+        if parent_value in inactives_data:
+            print(child_values)
+            updated_inactives_data.extend(child_values)
+    
     return updated_inactives_data
 
 def generate_diagram_content(imports_data, inactives_data):
-    diagram_content = ['blockdiag{']
+    diagram_content = ['blockdiag{\n']
+    class_content = ['class inactives [color = "#850d28", style = dotted];']
+    diagram_content.extend(class_content)
     for entry in imports_data:
         parent_value = entry[0]
         child_values = entry[1:]
@@ -79,14 +75,12 @@ def generate_diagram_content(imports_data, inactives_data):
         for value in child_values:
             diagram_content.append(f'"{parent_value}" -> "{value}";')
     
-
-    diagram_content.append(' group { \n color="#850d28";\n label="inactive";')
     for entry in inactives_data:
-        diagram_content.append(f'"{entry}";')
-    diagram_content.append('}}')
+        diagram_content.append(f'"{entry}" [class = "inactives"];')
+    diagram_content.append('}')
+    
     return '\n'.join(diagram_content)
 
-    print(diagram_content)
     
 def save_diagram(diagram_content, output_path):
     response = requests.post('https://kroki.io/blockdiag/png', data=diagram_content)
@@ -94,15 +88,16 @@ def save_diagram(diagram_content, output_path):
     if response.status_code == 200:
         with open(output_path, 'wb') as f:
             f.write(response.content)
+    else: 
+        print(response.status_code)
+
  
 
 
 folder_path = os.path.expanduser('~/.config/nixos')
 output_path = os.path.join(folder_path, 'nix_imports.png')
 imports_data, inactives_data = process_folder(folder_path)
-inactives_data = inactives_recursive(imports_data, inactives_data)
-diagram_content = generate_diagram_content(imports_data, inactives_data)
-print(diagram_content)
-save_diagram(diagram_content, output_path)
 
-#
+inactives_data.extend(inactives_recursive(imports_data, inactives_data)) 
+diagram_content = generate_diagram_content(imports_data, inactives_data)
+save_diagram(diagram_content, output_path)
