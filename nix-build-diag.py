@@ -59,7 +59,6 @@ def inactives_recursive(imports_data, inactives_data):
         parent_value = entry[0]
         child_values = entry[1:]
         if parent_value in inactives_data:
-            print(child_values)
             updated_inactives_data.extend(child_values)
     
     return updated_inactives_data
