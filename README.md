@@ -9,7 +9,7 @@ if you are writing your configuration in ~/.config/nixos this program generates 
 
 ## known issues 
 
-[ ] does not yet work with files declared via let-in eg: 
+- [ ] does not yet work with files declared via let-in e.g. : 
 ```
 let
 base = import ./base.nix pkgs;
@@ -17,6 +17,6 @@ in
 ...
 ```
 
-[ ] does not yet add grandchildren of inactive imported files to the inactive list
-[ ] works with clear text post not encoded get-request 
+- [ ] does not yet add grandchildren of inactive imported files to the inactive list
+- [ ] works with clear text post not encoded get-request 
 
